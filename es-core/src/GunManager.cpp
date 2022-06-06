@@ -61,6 +61,33 @@ GunManager::~GunManager()
 #endif
 }
 
+void GunManager::readGunEvents(Gun* gun)
+{
+  int len;
+  struct input_event input_events[64];
+
+  while ((len = read(gun->fd, input_events, sizeof(input_events))) > 0) {
+    for(unsigned i=0; i<len; i++) {
+      if(input_events[i].type == EV_KEY) {
+	//printf("key, code=%i, value=%i\n", input_events[i].code, input_events[i].value);
+	switch(input_events[i].code) {
+	case KEY_CONFIG:
+	  if(input_events[i].value == 1) {
+	    // starting calibration
+	  } else {
+	    // stopping calibration
+	  }
+	  break;
+	case BTN_LEFT:
+	  break;
+	case BTN_RIGHT:
+	  break;
+	}
+      }
+    }
+  }
+}
+
 void GunManager::updateGuns(Window* window)
 {
 #ifdef HAVE_UDEV
@@ -105,8 +132,10 @@ void GunManager::updateGuns(Window* window)
 	}
 #endif
 
-	for (Gun* gun : mGuns)
-		updateGunPosition(gun);
+	for (Gun* gun : mGuns) {
+	  updateGunPosition(gun);
+	  readGunEvents(gun);
+	}
 }
 
 bool GunManager::updateGunPosition(Gun* gun) 
