@@ -532,6 +532,36 @@ GameScreenSaverBase::GameScreenSaverBase(Window* window) : GuiComponent(window),
 	mMarquee = nullptr;
 	mLabelGame = nullptr;
 	mLabelSystem = nullptr;
+	mLabelDate = nullptr;
+	mLabelTime = nullptr;
+
+	if (Settings::getInstance()->getBool("ScreenSaverDateTime"))
+	{
+		auto ph = ThemeData::getMenuTheme()->Text.font->getPath();
+		auto sz = mViewport.h / 16.f;
+		auto font = Font::get(sz, ph);
+		int fh = font->getLetterHeight();
+
+		mLabelDate = new TextComponent(mWindow);
+		mLabelDate->setPosition(mViewport.x, mViewport.y);
+		mLabelDate->setSize(mViewport.w, sz * 0.66);
+		mLabelDate->setHorizontalAlignment(ALIGN_LEFT);
+		mLabelDate->setVerticalAlignment(ALIGN_CENTER);
+		mLabelDate->setColor(0xD0D0D0FF);
+		mLabelDate->setGlowColor(0x00000060);
+		mLabelDate->setGlowSize(2);
+		mLabelDate->setFont(ph, sz * 0.66);
+
+		mLabelTime = new TextComponent(mWindow);
+		mLabelTime->setPosition(mViewport.x, mViewport.y + mLabelDate->getSize().y() * 1.3f);
+		mLabelTime->setSize(mViewport.w, fh);
+		mLabelTime->setHorizontalAlignment(ALIGN_LEFT);
+		mLabelTime->setVerticalAlignment(ALIGN_CENTER);
+		mLabelTime->setColor(0xFFFFFFFF);
+		mLabelTime->setGlowColor(0x00000040);
+		mLabelTime->setGlowSize(3);
+		mLabelTime->setFont(font);
+	}
 }
 
 GameScreenSaverBase::~GameScreenSaverBase()
@@ -558,6 +588,18 @@ GameScreenSaverBase::~GameScreenSaverBase()
 	{
 		delete mLabelSystem;
 		mLabelSystem = nullptr;
+	}
+
+	if (mLabelDate != nullptr)
+	{
+		delete mLabelDate;
+		mLabelDate = nullptr;
+	}
+
+	if (mLabelTime != nullptr)
+	{
+		delete mLabelTime;
+		mLabelTime = nullptr;
 	}
 }
 
@@ -774,6 +816,42 @@ void GameScreenSaverBase::render(const Transform4x4f& transform)
 		mDecoration->setOpacity(mOpacity);
 		mDecoration->render(transform);
 	}
+
+	if (mLabelDate)
+	{
+		mLabelDate->setOpacity(255);
+		mLabelDate->render(transform);
+	}
+
+	if (mLabelTime)
+	{
+		mLabelTime->setOpacity(255);
+		mLabelTime->render(transform);
+	}
+}
+
+void GameScreenSaverBase::update(int deltaTime)
+{
+	if (Settings::getInstance()->getBool("ScreenSaverDateTime"))
+	{
+		time_t now = time(NULL);
+		struct tm* timeinfo = localtime(&now);
+
+		char dateBuffer[64];
+		char timeBuffer[64];
+		strftime(dateBuffer, sizeof(dateBuffer), Settings::getInstance()->getString("ScreenSaverDateFormat").c_str(), timeinfo);
+		strftime(timeBuffer, sizeof(timeBuffer), Settings::getInstance()->getString("ScreenSaverTimeFormat").c_str(), timeinfo);
+
+		if (mLabelDate)
+		{
+			mLabelDate->setText(std::string(dateBuffer));
+		}
+
+		if (mLabelTime)
+		{
+			mLabelTime->setText(std::string(timeBuffer));
+		}
+	}
 }
 
 void GameScreenSaverBase::setOpacity(unsigned char opacity)
@@ -938,6 +1016,18 @@ void VideoScreenSaver::render(const Transform4x4f& transform)
 	{
 		mDecoration->setOpacity(mOpacity);
 		mDecoration->render(transform);		
+	}
+
+	if (mLabelDate)
+	{
+		mLabelDate->setOpacity(255);
+		mLabelDate->render(transform);
+	}
+
+	if (mLabelTime)
+	{
+		mLabelTime->setOpacity(255);
+		mLabelTime->render(transform);
 	}
 
 	if (Settings::DebugImage())
