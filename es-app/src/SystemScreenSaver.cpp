@@ -26,7 +26,8 @@
 #include "Paths.h"
 #include "ApiSystem.h"
 
-#define FADE_TIME 			500
+#define FADE_TIME					(500)
+#define DATE_TIME_UPDATE_INTERVAL	(100)
 
 SystemScreenSaver::SystemScreenSaver(Window* window) :
 	mVideoScreensaver(NULL),
@@ -534,6 +535,8 @@ GameScreenSaverBase::GameScreenSaverBase(Window* window) : GuiComponent(window),
 	mLabelSystem = nullptr;
 	mLabelDate = nullptr;
 	mLabelTime = nullptr;
+	mDateTimeUpdateAccumulator = 0;
+	mDateTimeLastUpdate = 0;
 
 	if (Settings::getInstance()->getBool("ScreenSaverDateTime"))
 	{
@@ -834,22 +837,36 @@ void GameScreenSaverBase::update(int deltaTime)
 {
 	if (Settings::getInstance()->getBool("ScreenSaverDateTime"))
 	{
-		time_t now = time(NULL);
-		struct tm* timeinfo = localtime(&now);
-
-		char dateBuffer[64];
-		char timeBuffer[64];
-		strftime(dateBuffer, sizeof(dateBuffer), Settings::getInstance()->getString("ScreenSaverDateFormat").c_str(), timeinfo);
-		strftime(timeBuffer, sizeof(timeBuffer), Settings::getInstance()->getString("ScreenSaverTimeFormat").c_str(), timeinfo);
-
-		if (mLabelDate)
+		mDateTimeUpdateAccumulator += deltaTime;
+		if (mDateTimeUpdateAccumulator >= DATE_TIME_UPDATE_INTERVAL)
 		{
-			mLabelDate->setText(std::string(dateBuffer));
-		}
+			mDateTimeUpdateAccumulator -= DATE_TIME_UPDATE_INTERVAL;
 
-		if (mLabelTime)
-		{
-			mLabelTime->setText(std::string(timeBuffer));
+			time_t now = time(NULL);
+			if (now != mDateTimeLastUpdate)
+			{
+				mDateTimeLastUpdate = now;
+
+				struct tm* timeinfo = localtime(&now);
+
+				const std::string& dateFormat = Settings::getInstance()->getString("ScreenSaverDateFormat");
+				const std::string& timeFormat = Settings::getInstance()->getString("ScreenSaverTimeFormat");
+
+				char dateBuffer[64];
+				char timeBuffer[64];
+				strftime(dateBuffer, sizeof(dateBuffer), dateFormat.c_str(), timeinfo);
+				strftime(timeBuffer, sizeof(timeBuffer), timeFormat.c_str(), timeinfo);
+
+				if (mLabelDate)
+				{
+					mLabelDate->setText(std::string(dateBuffer));
+				}
+
+				if (mLabelTime)
+				{
+					mLabelTime->setText(std::string(timeBuffer));
+				}
+			}
 		}
 	}
 }

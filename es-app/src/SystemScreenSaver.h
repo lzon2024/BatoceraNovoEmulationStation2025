@@ -34,6 +34,9 @@ protected:
 	ImageComponent*		mDecoration;
 
 	Renderer::Rect		mViewport;
+
+	int 				mDateTimeUpdateAccumulator;
+	time_t				mDateTimeLastUpdate;
 };
 
 class ImageScreenSaver : public GameScreenSaverBase
