@@ -542,11 +542,12 @@ GameScreenSaverBase::GameScreenSaverBase(Window* window) : GuiComponent(window),
 	{
 		auto ph = ThemeData::getMenuTheme()->Text.font->getPath();
 		auto sz = mViewport.h / 16.f;
+		auto margin = sz / 2.f;
 		auto font = Font::get(sz, ph);
 		int fh = font->getLetterHeight();
 
 		mLabelDate = new TextComponent(mWindow);
-		mLabelDate->setPosition(mViewport.x, mViewport.y);
+		mLabelDate->setPosition(mViewport.x + margin, mViewport.y + margin);
 		mLabelDate->setSize(mViewport.w, sz * 0.66);
 		mLabelDate->setHorizontalAlignment(ALIGN_LEFT);
 		mLabelDate->setVerticalAlignment(ALIGN_CENTER);
@@ -556,7 +557,7 @@ GameScreenSaverBase::GameScreenSaverBase(Window* window) : GuiComponent(window),
 		mLabelDate->setFont(ph, sz * 0.66);
 
 		mLabelTime = new TextComponent(mWindow);
-		mLabelTime->setPosition(mViewport.x, mViewport.y + mLabelDate->getSize().y() * 1.3f);
+		mLabelTime->setPosition(mViewport.x + margin, mViewport.y + margin + mLabelDate->getSize().y() * 1.3f);
 		mLabelTime->setSize(mViewport.w, fh);
 		mLabelTime->setHorizontalAlignment(ALIGN_LEFT);
 		mLabelTime->setVerticalAlignment(ALIGN_CENTER);
@@ -1053,7 +1054,7 @@ void VideoScreenSaver::render(const Transform4x4f& transform)
 
 void VideoScreenSaver::update(int deltaTime)
 {
-	GameScreenSaverBase::update(deltaTime);
+	GameScreenSaverBase::update(deltaTime); 
 
 	if (mVideo)
 	{
