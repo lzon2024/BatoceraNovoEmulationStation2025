@@ -1,4 +1,4 @@
-EmulationStation
+LZ EmulationStation
 ================
 
 EmulationStation is a cross-platform graphical front-end for emulators with controller navigation.
