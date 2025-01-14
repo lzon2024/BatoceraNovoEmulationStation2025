@@ -263,12 +263,12 @@ void GuiMenu::addVersionInfo()
 
 	if (!ApiSystem::getInstance()->getVersion().empty())
 	{
-		if (ApiSystem::getInstance()->getApplicationName() == "LZGAMES")
-			label = "LZGAMES";
+		//if (ApiSystem::getInstance()->getApplicationName() == "LZGAMES")
+			//label = "LZGAMES";
 		else
 		{
-			std::string aboutInfo = ApiSystem::getInstance()->getApplicationName() + " V" LZGAMES;
-			label =2025;
+			//std::string aboutInfo = ApiSystem::getInstance()->getApplicationName() + " V" LZGAMES;
+			//label =2025;
 		}		
 	}
 		
