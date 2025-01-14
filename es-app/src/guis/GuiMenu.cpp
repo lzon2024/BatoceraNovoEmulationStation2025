@@ -209,9 +209,9 @@ GuiMenu::GuiMenu(Window *window, bool animate) : GuiComponent(window), mMenu(win
 	}
 
 #ifdef WIN32
-	addEntry(_("QUIT"), !Settings::getInstance()->getBool("ShowOnlyExit") || !Settings::getInstance()->getBool("ShowExit"), [this] { openQuitMenu(); }, "iconQuit");
+	addEntry(_("DESLIGAR LZ-RETRO"), !Settings::getInstance()->getBool("ShowOnlyExit") || !Settings::getInstance()->getBool("ShowExit"), [this] { openQuitMenu(); }, "iconQuit");
 #else
-	addEntry(_("QUIT").c_str(), true, [this] { openQuitMenu(); }, "iconQuit");
+	addEntry(_("DESLIGAR LZ-RETRO").c_str(), true, [this] { openQuitMenu(); }, "iconQuit");
 #endif
 	
 	addChild(&mMenu);
@@ -263,8 +263,8 @@ void GuiMenu::addVersionInfo()
 
 	if (!ApiSystem::getInstance()->getVersion().empty())
 	{
-		if (ApiSystem::getInstance()->getApplicationName() == "BATOCERA")
-			label = "BATOCERA.LINUX ES V" + ApiSystem::getInstance()->getVersion() + buildDate;
+		if (ApiSystem::getInstance()->getApplicationName() == "LZGAMES")
+			label = "LZGAMES.LINUX" + ApiSystem::getInstance()->getVersion() + buildDate;
 		else
 		{
 			std::string aboutInfo = ApiSystem::getInstance()->getApplicationName() + " V" + ApiSystem::getInstance()->getVersion();
