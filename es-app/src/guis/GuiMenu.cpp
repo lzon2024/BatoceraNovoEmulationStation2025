@@ -197,12 +197,15 @@ GuiMenu::GuiMenu(Window *window, bool animate) : GuiComponent(window), mMenu(win
 			ApiSystem::getInstance()->isScriptingSupported(ApiSystem::UPGRADE))
 			addEntry(_("UPDATES & DOWNLOADS"), true, [this] { openUpdatesSettings(); }, "iconUpdates");
 
-		addEntry(_("SYSTEM SETTINGS").c_str(), true, [this] { openSystemSettings(); }, "iconSystem");
+		addEntry(_("CONFIGURE O SISTEMA").c_str(), true, [this] { openSystemSettings(); }, "iconSystem");
 	}
 	else
 	{
 		addEntry(_("INFORMATION").c_str(), true, [this] { openSystemInformations(); }, "iconSystem");
-		addEntry(_("UNLOCK USER INTERFACE MODE").c_str(), true, [this] { exitKidMode(); }, "iconAdvanced");
+		addEntry(_("SCRAPER").c_str(), true, [this] { openScraperSettings(); }, "iconScraper");	
+	        addEntry(_("CONFIGURE INPUT"), true, [this] { openConfigInput(); }, "iconControllers");
+	        addEntry(_("CONFIGURE OS CONTROLES"), true, [this] { openConfigInput(); }, "iconControllers");
+		addEntry(_("DESLIGAR LZ-RETRO").c_str(), true, [this] { openQuitMenu(); }, "iconQuit");
 	}
 
 #ifdef WIN32
