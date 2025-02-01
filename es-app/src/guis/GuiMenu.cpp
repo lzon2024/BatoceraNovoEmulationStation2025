@@ -131,7 +131,7 @@ GuiMenu::GuiMenu(Window *window, bool animate) : GuiComponent(window), mMenu(win
 	// QUIT >
 
 	// KODI
-#ifdef _ENABLE_KODI_
+//#ifdef _ENABLE_KODI_
 	//if (SystemConf::getInstance()->getBool("kodi.enabled", true) && ApiSystem::getInstance()->isScriptingSupported(ApiSystem::KODI))
 		//addEntry(_("KODI MEDIA CENTER").c_str(), false, [this] 
 	// { 
