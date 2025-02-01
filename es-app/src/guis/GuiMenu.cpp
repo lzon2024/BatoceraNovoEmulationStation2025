@@ -131,16 +131,6 @@ GuiMenu::GuiMenu(Window *window, bool animate) : GuiComponent(window), mMenu(win
 	// QUIT >
 
 	// KODI
-#ifdef _ENABLE_KODI_
-	
-	{ 
-		Window *window = mWindow;
-		delete this;
-		if (!ApiSystem::getInstance()->launchKodi(window))
-			LOG(LogWarning) << "Shutdown terminated with non-zero result!";
-
-	}, "iconKodi");	
-#endif
 
 	if (ApiSystem::getInstance()->isScriptingSupported(ApiSystem::RETROACHIVEMENTS) &&
 		SystemConf::getInstance()->getBool("global.retroachievements") &&
